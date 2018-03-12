@@ -31,7 +31,9 @@ RUN apt-get update -qq && \
 
 # https://github.com/Airblader/i3/wiki/Compiling-&-Installing#basics
 # clone the repository
-RUN git clone https://github.com/Airblader/i3.git .
+ARG VERSION
+RUN git clone https://github.com/Airblader/i3.git . && \
+    git checkout ${VERSION}
 
 # compile & install
 RUN autoreconf --force --install
@@ -39,17 +41,17 @@ RUN autoreconf --force --install
 # Disabling sanitizers is important for release versions!
 # The prefix and sysconfdir are, obviously, dependent on the distribution.
 RUN mkdir -p build && \
-    mkdir -p /build-result && \
+    mkdir -p /dist && \
     cd build/ && \
     ../configure --prefix=/usr --sysconfdir=/etc --disable-sanitizers && \
-    make -j8 && \
+    make && \
     checkinstall \
       --type=debian \
       --nodoc \
       --pkgname=i3 \
       --pkgversion $(cat /build/I3_VERSION) \
       --default \
-      --pakdir=/build-result \
+      --pakdir=/dist \
       --instal=no \
       --requires='libc6 \(\>= 2.14\), libcairo2 \(\>= 1.14.4\), libev4 \(\>= 1:4.04\), libglib2.0-0 \(\>= 2.12.0\), libpango-1.0-0 \(\>= 1.14.0\), libpangocairo-1.0-0 \(\>= 1.22.0\), libpcre3, libstartup-notification0 \(\>= 0.10\), libxcb-cursor0 \(\>= 0.0.99\), libxcb-icccm4 \(\>= 0.4.1\), libxcb-keysyms1 \(\>= 0.4.0\), libxcb-randr0 \(\>= 1.3\), libxcb-util1 \(\>= 0.4.0\), libxcb-xinerama0, libxcb-xkb1, libxcb-xrm0 \(\>= 0.0.0\), libxcb1 \(\>= 1.6\), libxkbcommon-x11-0 \(\>= 0.5.0\), libxkbcommon0 \(\>= 0.5.0\), libyajl2 \(\>= 2.0.4\), perl, x11-utils' \
       --provides='x-window-manager' \

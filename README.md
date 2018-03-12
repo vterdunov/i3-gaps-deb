@@ -3,4 +3,4 @@
 Reproducible debian package build
 
 - Install Docker
-- Run `make debian`
+- Run `make deb`
