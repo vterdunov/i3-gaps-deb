@@ -21,7 +21,11 @@ ARG BUILD_PACKAGES='\
     libxcb-xrm-dev \
     git \
     ca-certificates \
-    checkinstall'
+    checkinstall \
+    libxcb-xkb-dev \
+    libxcb-xinerama0-dev \
+    libxcb-randr0-dev \
+    libxcb-shape0-dev'
 
 RUN echo 'deb http://ppa.launchpad.net/aguignard/ppa/ubuntu xenial main' > /etc/apt/sources.list.d/aguignard-ppa.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9058FBF6
